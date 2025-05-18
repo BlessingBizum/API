@@ -7,24 +7,58 @@
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
 </head>
 <body>
-    <p>
-        <ion-icon name="search-outline"></ion-icon>
-    </p>
+    <h1>Phoenix_Register</h1>
+    <input type="text" id="name" placeholder="name">
+    <input type="email" id="email" placeholder="email">
+    <input type="password" id="password" placeholder="password">
+    <input type="text" id="team" placeholder="team">
+
+    <button id="registerButton">Register here</button>
+    <div id="result"></div>
 
 
 
     <script>
-      // api/register.js
-      export default function handler(req, res) {
-      if (req.method === "POST") {
-        const data = req.body;
-        res.status(200).json({ message: "User registered", data });
-      } else {
-        res.status(405).json({ message: "Only POST allowed" });
-      }
-    }
 
-  //      fetch("https://api.blockfuselabs.com/api/v2/register",{
+      let register = document.getElementById("registerButton")
+      let result = document.getElementById("result")
+
+      register.addEventListener('click', (e) => {
+        e.preventDefault
+
+        let registerData = {
+          name: document.getElementById("name").value,
+          email: document.getElementById("email").value,
+          password: document.getElementById("password").value,
+          team_name: document.getElementById("team").value
+        }
+
+        fetch('https://test.blockfuselabs.com/api/register', {
+          method: "POST",
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(registerData)
+        })
+        .then((res) => {
+          if(!res.ok){
+            throw new Error(`HTTP error! status: ${res.status}`)
+          }
+          return response.json()
+        })
+        .then(data => {
+          console.log('Registration successful:', data)
+          result.textContent = 'Registration successful!'
+        })
+        .catch(error => {
+          console.error('Registrattion failed', error)
+          result.textContent ='Registration failed'
+        })
+      })
+
+      
+
+  //      fetch("https://test.blockfuselabs.com/api/register",{
   //       method: "POST",
   //       headers: {
   //           Accept: "application/json"
@@ -36,7 +70,12 @@
   //      })
   // .then((response) => response.json())
   // .then((data) => {
-  //   console.log(data);
+  //   let data = JSON.stringify({
+  //   Name: name,
+  //   Email: email,
+  //   Passport: password,
+  //   Team: team
+  // });
   // })
   // .catch((error) => {
   //   console.error("Fetch error:", error);
